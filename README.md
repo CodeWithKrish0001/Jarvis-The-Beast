@@ -60,7 +60,7 @@ Some dependencies are only needed for specific models/tools. See below.
      - `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`, `TELEGRAM_SESSION_NAME`
      - `ELEVENLABS_API_KEY`
 
-> 💬 **Bonus:** Need help with free **OpenAI** or **Together.ai** API keys? 
+> 💬 **Bonus:** Contanct me if you want free **OpenAI** and **Together.ai** API keys
 
 4. **Run Jarvis**:
    ```bash
