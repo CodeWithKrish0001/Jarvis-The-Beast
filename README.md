@@ -59,6 +59,9 @@ Some dependencies are only needed for specific models/tools. See below.
      - `GEMINI_API_KEY`, `OPENAI_API_KEY`, `TOGETHER_API_KEY`, `GROQ_API_KEY`
      - `TELEGRAM_API_ID`, `TELEGRAM_API_HASH`, `TELEGRAM_SESSION_NAME`
      - `ELEVENLABS_API_KEY`
+
+> 💬 **Bonus:** Need help with free **OpenAI** or **Together.ai** API keys? 
+
 4. **Run Jarvis**:
    ```bash
    python main.py
