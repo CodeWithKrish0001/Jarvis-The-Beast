@@ -1,0 +1,17 @@
+playsound
+requests
+python-dotenv
+PyQt5
+openai
+google-generativeai
+pyrogram
+fuzzywuzzy
+pygame
+AppOpener
+speechrecognition
+mtranslate
+selenium
+edge-tts
+elevenlabs
+trafilatura
+aiohttp
