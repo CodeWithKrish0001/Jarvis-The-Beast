@@ -5,13 +5,22 @@ import os
 import time
 from models.text_generation import streaming_wrapper
 from models.config import ensure_directories_exist
+import pygame
 
 text_module = importlib.import_module(f"models.text_generation.{TEXT_MODEL}")
 tts_module = importlib.import_module(f"models.tts.{TTS_MODEL}")
 stt_module = importlib.import_module(f"models.stt.{STT_MODEL}")
 
 def play_audio(audio_path):
-    playsound(audio_path)
+    pygame.mixer.init()
+    pygame.mixer.music.load(audio_path)
+    pygame.mixer.music.play()
+
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
+
+    pygame.mixer.music.stop()
+    pygame.mixer.quit()
 
 def text_mode():
     print("\n=== Text Mode (Streaming Response) ===")
