@@ -15,3 +15,4 @@ edge-tts
 elevenlabs
 trafilatura
 aiohttp
+crawl4ai
