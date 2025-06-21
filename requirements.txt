@@ -4,6 +4,8 @@ pyaudio
 requests
 python-dotenv
 PyQt5
+Levenshtein
+tgcrypto
 openai
 google-generativeai
 pyrogram
