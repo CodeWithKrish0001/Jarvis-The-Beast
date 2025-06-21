@@ -1,4 +1,6 @@
 playsound
+groq
+pyaudio
 requests
 python-dotenv
 PyQt5
