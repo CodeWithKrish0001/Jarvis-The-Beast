@@ -59,8 +59,9 @@ async def parallel_scrape_async(urls: list[str], timeout: int = 3) -> list[str]:
 
 def summerize(results, query):
     chat = model.start_chat()
-    full_text = f"You are a website summarizer. Here's the user query: '{query}'\n\nWeb search results:\n" + \
-        "\n\n".join([f"{r['name']}:\n{r['body']}" for r in results])
+    full_text = f"You are a website summarizer. Here's the user query: '{query}'\n\n" + \
+    "\n\n".join([r['body'] for r in results])
+
     response = chat.send_message(full_text)
     if response and response.text:
         print("Summary:", response.text, "\n")
@@ -86,13 +87,17 @@ def web_search(query: str, num: int = 4) -> str | list:
         })
 
     summary = summerize(results, query)
-    return urls if summary is None else summary
+    if summary and summary.strip():
+        return summary
+    else:
+        return "❌ Gemini didn't generate a valid summary. Please try a broader or clearer query."
+
 
 tool_definition = {
     "type": "function",
     "function": {
         "name": "web_search",
-        "description": "Searches the web for real-time information and returns the scrape websites summary.",
+        "description": "Searches the web for real-time information and returns the scrape websites summary. Use for latest imformation or websites without asking the user like 'can I use', you are not a kid",
         "parameters": {
             "type": "object",
             "properties": {
@@ -102,7 +107,7 @@ tool_definition = {
                 },
                 "num": {
                     "type": "integer",
-                    "description": "How many websites to scrape (default 4, max 20) it is mandatory to scrape at least 4 urls",
+                    "description": "How many websites to scrape (default 4, max 20) it is mandatory to scrape at least 4 urls you cant make it 1",
                     "default": 4
                 }
             },
