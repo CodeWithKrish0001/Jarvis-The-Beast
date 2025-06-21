@@ -50,7 +50,7 @@ async def parallel_scrape_async(urls: list[str], timeout: int = 3) -> list[str]:
         bodies = []
         for res in results:
             if res.success and res.markdown:
-                snippet = res.markdown[:1000]
+                snippet = res.markdown
                 bodies.append(snippet)
             else:
                 print(f"❌ Failed to scrape: {res.url}")
