@@ -82,6 +82,19 @@ model = genai.GenerativeModel(
             pywhatkit.playonyt(song)
 
         play("Supreme song")
+
+        Prompt: "Open Notepad and YouTube"
+
+        Response:
+        import subprocess
+        import webbrowser
+
+        try:
+            subprocess.Popen("notepad.exe")
+        except:
+            pass (avoid faltu ke prints)
+
+        webbrowser.open("https://www.youtube.com")
         """
     )
 )
