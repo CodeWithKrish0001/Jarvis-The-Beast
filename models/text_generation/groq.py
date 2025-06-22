@@ -5,6 +5,7 @@ from utils.models.system_prompt import system_prompt
 from utils.common.ensure_save_directory import ensure_save_directory
 from utils.models.available_tools import get_available_tools
 from utils.common.chat_history import load_chat_history, save_chat_history
+from config import model_for_groq
 from tools import tool_registry
 import json
 
@@ -13,6 +14,8 @@ GROQ_API_KEY = env.get("GROQ_API_KEY")
 if not GROQ_API_KEY:
     raise ValueError("GROQ_API_KEY not found")
 client = Groq(api_key=GROQ_API_KEY)
+
+model = model_for_groq
 
 def safe_history(h):
     s=[]
@@ -45,7 +48,7 @@ def handle_tool_calls(msg, history, tools):
         })
         history.append({"role":"tool","tool_call_id":tc.id,"name":name,"content":str(res)})
         resp = client.chat.completions.create(
-            model="llama3-70b-8192",
+            model=model,
             messages=[{"role":"system","content":system_prompt}]+history,
             tools=tools, tool_choice="auto"
         )
@@ -58,7 +61,7 @@ def generate_response(query, save_res=True):
     history = load_chat_history()
     history.append({"role":"user","content":query})
     resp = client.chat.completions.create(
-        model="llama3-70b-8192",
+        model=model,
         messages=[{"role":"system","content":system_prompt}]+history,
         tools=tools, tool_choice="auto"
     )
@@ -78,7 +81,7 @@ def stream_response(query):
 
     try:
         initial_response = client.chat.completions.create(
-            model="llama3-70b-8192",
+            model=model,
             messages=[{"role": "system", "content": system_prompt}] + history,
             tools=tools,
             tool_choice="auto"
@@ -94,7 +97,7 @@ def stream_response(query):
             return
 
         response = client.chat.completions.create(
-            model="llama3-70b-8192",
+            model=model,
             messages=[{"role": "system", "content": system_prompt}] + history,
             stream=True
         )

@@ -3,14 +3,15 @@ from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
 from elevenlabs import stream
 from models.config import save_tts_location
+from config import eleven_voice, eleven_voice_model
 from utils.common.ensure_save_directory import ensure_save_directory
 import asyncio
 
 load_dotenv()
 elevenlabs = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
-VOICE_ID = "pNInz6obpgDQGcFmaJgB"
-MODEL_ID = "eleven_multilingual_v2"
+VOICE_ID = eleven_voice
+MODEL_ID = eleven_voice_model
 
 async def generate_tts_async(text, voice_id=VOICE_ID, model_id=MODEL_ID):
     ensure_save_directory(save_tts_location)

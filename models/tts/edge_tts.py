@@ -3,11 +3,12 @@ import os
 from edge_tts import Communicate
 from models.config import save_tts_location
 from utils.common.ensure_save_directory import ensure_save_directory
+from config import edge_tts_voice
 
 async def generate_tts_async(text):
     ensure_save_directory(save_tts_location)
 
-    tts = Communicate(text=text, voice="en-CA-LiamNeural")
+    tts = Communicate(text=text, voice=edge_tts_voice)
     await tts.save(save_tts_location)
     return save_tts_location
 

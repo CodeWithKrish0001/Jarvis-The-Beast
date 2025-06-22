@@ -1,6 +1,5 @@
 from config import TEXT_MODEL, TTS_MODEL, STT_MODEL
 import importlib
-from playsound import playsound
 import os
 import time
 from models.text_generation import streaming_wrapper

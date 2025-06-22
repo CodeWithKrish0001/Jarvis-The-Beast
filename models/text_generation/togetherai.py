@@ -8,6 +8,7 @@ from utils.common.ensure_save_directory import ensure_save_directory
 from utils.models.available_tools import get_available_tools
 from utils.common.chat_history import load_chat_history, save_chat_history
 from utils.models.execute_fake_call import execute_fake_tool_call_if_present
+from config import model_for_togetherai
 from tools import tool_registry
 
 env = dotenv_values(".env")
@@ -19,6 +20,8 @@ client = openai.OpenAI(
     api_key=TOGETHER_API_KEY,
     base_url="https://api.together.xyz/v1",
 )
+
+model = model_for_togetherai
 
 def safe_history(h):
     s = []
@@ -55,7 +58,7 @@ def handle_tool_calls(msg, history, tools):
         })
         history.append({"role": "tool", "tool_call_id": tc.id, "name": name, "content": str(res)})
         resp = client.chat.completions.create(
-            model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
+            model=model,
             messages=[{"role": "system", "content": system_prompt}] + history,
             tools=tools,
             tool_choice="auto"
@@ -69,7 +72,7 @@ def generate_response(query, save_res=True):
     history = load_chat_history()
     history.append({"role": "user", "content": query})
     resp = client.chat.completions.create(
-        model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        model=model,
         messages=[{"role": "system", "content": system_prompt}] + history,
         tools=tools,
         tool_choice="auto"
@@ -94,7 +97,7 @@ def stream_response(query):
 
     try:
         initial_response = client.chat.completions.create(
-            model="meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo",
+            model=model,
             messages=[{"role": "system", "content": system_prompt}] + history,
             tools=tools,
             tool_choice="auto"
@@ -111,7 +114,7 @@ def stream_response(query):
             return
 
         response = client.chat.completions.create(
-            model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
+            model=model,
             messages=[{"role": "system", "content": system_prompt}] + history,
             stream=True
         )

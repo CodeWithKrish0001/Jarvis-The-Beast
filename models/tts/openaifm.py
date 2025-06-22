@@ -1,5 +1,6 @@
 import requests
 from models.config import save_tts_location
+from config import openaifm_voice
 from utils.common.ensure_save_directory import ensure_save_directory
 
 def generate_tts(text):
@@ -8,7 +9,7 @@ def generate_tts(text):
     url = "https://www.openai.fm/api/generate"
     payload = {
         "input": text,
-        "voice": "alloy",
+        "voice": openaifm_voice,
         "vibe": "null"
     }
 
