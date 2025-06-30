@@ -152,25 +152,40 @@ def auto_code_execute(prompt: str) -> str:
     with open(TEMP_FILE_PATH, "w", encoding="utf-8") as f:
         f.write(code)
 
-    try:
-        if os.name == 'nt':
-            if 'input(' in code or 'print(' in code:
-                os.system(f'start cmd /k python "{TEMP_FILE_PATH}"')
-            else:
-                subprocess.Popen(
-                    ["python", TEMP_FILE_PATH],
-                    creationflags=subprocess.CREATE_NO_WINDOW
-                )
-        elif os.name == 'posix':
-            os.system(f'gnome-terminal -- bash -c "python3 \\"{TEMP_FILE_PATH}\\"; exec bash"')
-        else:
-            return "❌ Unsupported OS for execution."
+    has_print = 'print(' in code
+    has_input = 'input(' in code
 
-        return "✅ Code is running."
+    try:
+        output = ""
+
+        # If input or print, open terminal so user sees interaction
+        if has_input or has_print:
+            if os.name == 'nt':
+                os.system(f'start cmd /k python "{TEMP_FILE_PATH}"')
+            elif os.name == 'posix':
+                os.system(f'gnome-terminal -- bash -c "python3 \\"{TEMP_FILE_PATH}\\"; exec bash"')
+        else:
+            # Still run the script for GUI/side effects (like opening browser)
+            subprocess.Popen(["python", TEMP_FILE_PATH], shell=True)
+
+        # If there's print but no input, capture output for assistant
+        if has_print and not has_input:
+            result = subprocess.run(
+                ["python", TEMP_FILE_PATH],
+                capture_output=True,
+                text=True
+            )
+            output = result.stdout.strip()
+
+        if output:
+            ai_response = chat.send_message(f"Output:\n{output}")
+            save_chat_history(chat.history)
+            return f"```python\n{code}\n```\n\noutput:\n{output}"
+
+        return f"```python\n{code}\n```\n\noutput:\n✅ Code executed successfully (no visible output)."
 
     except Exception as e:
         return f"❌ Execution Error:\n{e}"
-
 
 tool_definition = {
     "type": "function",
